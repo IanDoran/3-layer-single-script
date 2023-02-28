@@ -1,5 +1,6 @@
 import sqlite3
 import os
+import pytest
 
 
 class Singleton:
@@ -32,12 +33,12 @@ class Singleton:
                 rows = self.cursor.execute(sql_statement).fetchall()
             except Exception as e:
                 print(e)
+                
                 return []
             return rows
         else:
             print("No database connection")
             return []
-
 
 def initialize_database(): 
     """Initialise a file, and use sqlite3 to generate a small table we'll use for testing"""
@@ -95,9 +96,11 @@ def test_resetting_after_db_creation():
 
     initialize_database()
 
+
     db_a.get_cursor()
     assert 2 == len(db_b.sql("SELECT * FROM fish;"))
 
+    delete_database() #delete the database after finishing the reset
 
     
 if __name__=="__main__":
